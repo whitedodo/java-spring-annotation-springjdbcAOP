@@ -1,29 +1,20 @@
 /*
- * 	주제(Subject): Java Spring JDBC에서 어노테이션(X) - 트랜젝션 구현
- *  작성일자(Create Date): 2020-10-09
- *  저자(Author): Dodo / rabbit.white at daum dot net
+ * 	주제(Subject): 자바 환경설정 기반의 Spring Framework 4.2.4(Spring JDBC) 트랜젝션 AOP 구현
  *  파일명(Filename): AccountDAOImpl.java
- *  비고(Description):
- * 
+ *  저자(Author): Dodo / rabbit.white at daum dot net
+ *  생성일자(Create date): 2020-10-10
+ *  설명(Description):
  * 
  */
 
 package com.website.example.dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import com.website.example.common.MyDataSourceFactory;
 import com.website.example.vo.AccountVO;
+
 
 public class AccountDAOImpl implements AccountDAO {
 
@@ -46,29 +37,7 @@ public class AccountDAOImpl implements AccountDAO {
 	
 	public void createAccount(AccountVO vo) throws SQLException {
 		
-		TransactionSynchronizationManager.initSynchronization();	// 동기화
-		Connection c = DataSourceUtils.getConnection(ds); //커넥션을 생성
-		
-		// 데이터 저장소 바인딩(트랜젝션)
-		c.setAutoCommit(false); //트랜잭션을 시작
-		
-	    try{
-		
-	    	this.jdbcTemplate.update(INSERT, vo.getName(), vo.getBalance(), vo.getRegidate());
-	    	c.commit(); // 커밋
-	    	
-	    }
-	    catch(Exception e) {
-	    	c.rollback(); // 예외가 발생하면 롤백
-	    	
-	    }finally {
-	    	
-	    	DataSourceUtils.releaseConnection(c, ds); // 스프링 유틸리티를 이용해 DB커넥션을 닫는다.
-	    	TransactionSynchronizationManager.unbindResource(ds); // 동기화 작업을 종료하고
-	    	TransactionSynchronizationManager.clearSynchronization();     // 정리한다.
-	    	
-	    }
-		
+	    this.jdbcTemplate.update(INSERT, vo.getName(), vo.getBalance(), vo.getRegidate());		
 	}
 	
     public int getBalance(String name){
@@ -81,20 +50,20 @@ public class AccountDAOImpl implements AccountDAO {
     	
         return result;
     }
-     
-    public void minus(String name, int money) throws SQLException{
 
-    	// 예외 발생시키기
-    	if(true){
-    		throw new SQLException(); // 의도적 예외 발생
-   	    }
+    public void minus(String name, int money) throws SQLException{
     	
         this.jdbcTemplate.update(UPDATE_MINUS, name, money, name);
         
     }
-     
+    
     public void plus(String name, int money) throws SQLException{
-    	    	
+
+    	// 예외 발생시키기
+    	if(true){
+			throw new RuntimeException("런타임 에러");
+   	    }
+    	
         this.jdbcTemplate.update(UPDATE_PLUS, name, money, name);
     }
 	
