@@ -23,7 +23,7 @@ Java Spring Framework 4.2.4로 Annotation 방식의 AOP Spring JDBC를 구현하
 ##### (Implemented in Java environment setting method, and applied transaction and AOP (5 methods).)
 
 ### 2. 시연(Demonstration)
-##### 1. 
+##### 1. Spring Framework 4.2.4, Spring JDBC, Transaction AOP - Java 버전, https://youtu.be/A6N2yt5qd44, Accessed by 2020-10-10, Last Modified 2020-10-10.
 
 ### 3. 참고자료(Reference)
 ##### 1. Maven Repository: Search/Browse/Explore, https://mvnrepository.com/, Accessed by 2020-09-24, Last Modified .
